@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Example</title>
+    <meta http-equiv="Content-Security-Policy"/>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+            // Wait for device API libraries to load
+            document.addEventListener("deviceready", onDeviceReady, false);
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        // specify contact search criteria
+        var options = new ContactFindOptions();
+        options.filter = "Sanket";      // empty search string returns all contacts
+        // options.multiple = true;  // return multiple results
+        filter = ["displayName","phoneNumbers"]; // return contact.displayName field
+
+        // find contacts
+        navigator.contacts.find(filter, onSuccess, onError, options);
+    }
+
+    // onSuccess: Get a snapshot of the current contacts
+    //
+    function onSuccess(contacts) {
+        var list = document.getElementById('contact-list');
+        list.innerHTML = '';
+
+        for (var i=0; i<contacts.length; i++) {
+            var card = document.createElement('section');
+            card.innerHTML = `<div>
+                <b>Name:</b>${contacts[i].displayName}<br>
+                <b>PhoneNumber:</b>${contacts[i].phoneNumbers[0].value}
+            </div>`;
+            list.appendChild(card);
+            console.log(contacts[i].displayName + contacts[i].phoneNumbers[0].value);
+        }
+    };
+
+    // onError: Failed to get the contacts
+    //
+    function onError(contactError) {
+        alert('onError!');
+    }
+</script>
+</head>
+
+<body>
+    <h1>Example</h1>
+    <p>Find Contacts</p>
+    <section id="contact-list"></section>
+</body>
+</html>
